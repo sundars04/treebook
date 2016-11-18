@@ -13,6 +13,12 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'devise'
 gem 'devise-bootstrapped', '~> 0.1.1'
 gem 'simple_form'
+
+
+group :test do
+  gem 'shoulda'
+end
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'sqlite3'

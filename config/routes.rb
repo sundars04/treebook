@@ -1,14 +1,25 @@
 Rails.application.routes.draw do
   get 'profiles/show'
 
-  devise_for :users
 
-  devise_scope :user do
+  as :user do
     get 'signup', to: 'devise/registrations#new', as: :signup
-    get 'signin', to: 'devise/sessions#new', as: :signin    
+    get 'signin', to: 'devise/sessions#new', as: :signin
+    get 'signout', to: 'devise/sessions#destroy', as: :logout
   end
 
+  devise_for :users, skip: [:sessions]
+
+  as :user do
+    get 'signin', to: 'devise/sessions#new', as: :new_user_session
+    post "signin", to: 'devise/sessions#create', as: :user_session
+    delete 'signout', to: 'devise/sessions#destroy', as: :destroy_user_session
+  end
+
+  resources :user_friendships
+
   resources :statuses
+  get 'feed', to: 'statuses#index', as: :feed
   root :to => 'statuses#index'
 
   get '/:id', to: 'profiles#show', as: 'profile'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161117023531) do
+ActiveRecord::Schema.define(version: 20161118060530) do
 
   create_table "statuses", force: :cascade do |t|
     t.text     "content"
@@ -18,6 +18,14 @@ ActiveRecord::Schema.define(version: 20161117023531) do
     t.datetime "updated_at", null: false
     t.integer  "user_id"
     t.index ["user_id"], name: "index_statuses_on_user_id"
+  end
+
+  create_table "user_friendships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "friend_id"], name: "index_user_friendships_on_user_id_and_friend_id"
   end
 
   create_table "users", force: :cascade do |t|

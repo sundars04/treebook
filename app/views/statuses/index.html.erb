@@ -12,7 +12,7 @@
       <%= image_tag status.user.gravatar_url, class:"img" %>
     </div>
     <div class="col-md-7">    
-      <strong><%= status.user.full_name %></strong>
+      <strong><%= link_to status.user.full_name, profile_path(status.user) %></strong>
       
       <p><%= status.content.truncate(100) %></p>
       <div class="meta">
