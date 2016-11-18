@@ -6,17 +6,27 @@
 
 <% @statuses.each do |status| %>
 <div class="status">
-  </br>
-  <strong><%= status.user.full_name %></strong>
-  <p><%= status.content.truncate(100) %></p>
-  <div class="meta">
-    <%= link_to "Created " + (status.created_at.to_time.strftime('%B %e at %l:%M %p')), status %>
-    <span class="admin">
-      | <%= link_to 'Edit', edit_status_path(status) %> |
-      <%= link_to 'Destroy', status, method: :delete, data: { confirm: 'Are you sure?' } %>
-    </span>
+  <div class="row">
+    <br>
+    <div class="col-md-1">
+      <%= image_tag status.user.gravatar_url, class:"img" %>
+    </div>
+    <div class="col-md-7">    
+      <strong><%= status.user.full_name %></strong>
+      
+      <p><%= status.content.truncate(100) %></p>
+      <div class="meta">
+        <%= link_to "Created " + (status.created_at.to_time.strftime('%B %e at %l:%M %p')), status %>
+        <% if status.user == current_user %>
+          <span class="admin">
+            | <%= link_to 'Edit', edit_status_path(status) %> |
+            <%= link_to 'Destroy', status, method: :delete, data: { confirm: 'Are you sure?' } %>
+          </span>
+        <% end -%>
+      </div>
+    </div>
+    </br>
   </div>
-  </br>
 </div>
 <% end %>
 

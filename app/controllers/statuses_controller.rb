@@ -1,11 +1,11 @@
 class StatusesController < ApplicationController
   before_action :set_status, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user!, only:[:new, :create, :edit, :update, :destroy]
 
   # GET /statuses
   # GET /statuses.json
   def index
-    @statuses = Status.all
+    @statuses = Status.order("created_at DESC")
   end
 
   # GET /statuses/1
@@ -15,7 +15,7 @@ class StatusesController < ApplicationController
 
   # GET /statuses/new
   def new
-    @status = Status.new
+    @status = current_user.statuses.build
   end
 
   # GET /statuses/1/edit
@@ -25,7 +25,7 @@ class StatusesController < ApplicationController
   # POST /statuses
   # POST /statuses.json
   def create
-    @status = Status.new(status_params)
+    @status = current_user.statuses.build(status_params)
 
     respond_to do |format|
       if @status.save
