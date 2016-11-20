@@ -13,10 +13,12 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'devise'
 gem 'devise-bootstrapped', '~> 0.1.1'
 gem 'simple_form'
+gem 'state_machines-activerecord'
 
 
 group :test do
   gem 'shoulda'
+  gem 'factory_girl'
 end
 
 group :development, :test do
