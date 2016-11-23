@@ -2,7 +2,7 @@ class UserFriendshipsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @user_friendships = current_user.user_friendships.all
+    @user_friendships = friendship_association.all
   end
 
   def new
@@ -44,6 +44,16 @@ class UserFriendshipsController < ApplicationController
     redirect_to user_friendships_path
   end
 
+  def block
+    @user_friendship = current_user.user_friendships.find(params[:id])
+    if @user_friendship.block!
+      flash[:success] = "You have blocked #{@user_friendship.friend.first_name}"
+    else
+      flash[:error] = "That friendship could not be blocked"
+    end
+    redirect_to user_friendships_path
+  end
+
   def edit
     @friend = User.where(profile_name: params[:id]).first
     @user_friendship = current_user.user_friendships.where(friend_id: @friend.id).first
@@ -62,5 +72,20 @@ class UserFriendshipsController < ApplicationController
     def friends_params
       # params.require(:user_friendship).permit(:user, :friend, :user_id, :friend_id, :state)
       params.require(:friendship).permit(:user, :friend, :user_id, :friend_id, :state)
+    end
+
+    def friendship_association
+      case params[:list]
+      when nil
+        current_user.user_friendships.all
+      when 'blocked'
+        current_user.blocked_user_friendships.all
+      when 'pending'
+        current_user.pending_user_friendships.all
+      when 'accepted'
+        current_user.accepted_user_friendships.all
+      when 'requested'
+        current_user.requested_user_friendships.all
+      end
     end
 end

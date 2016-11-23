@@ -8,6 +8,10 @@ class User < ApplicationRecord
   has_many :friends,-> { where(user_friendships: { state: "accepted"}) }, through: :user_friendships
   has_many :pending_user_friendships, -> { where  state: "pending"  }, class_name: 'UserFriendship', foreign_key: :user_id
   has_many :pending_friends, through: :pending_user_friendships, source: :friend
+  has_many :requested_user_friendships, -> { where  state: "requested"  }, class_name: 'UserFriendship', foreign_key: :user_id
+  has_many :requested_friends, through: :pending_user_friendships, source: :friend
+  has_many :blocked_user_friendships, -> { where  state: "blocked"  }, class_name: 'UserFriendship', foreign_key: :user_id
+  has_many :blocked_friends, through: :pending_user_friendships, source: :friend
   # has_many :friends, through: :user_friendships,
   #                    conditions: { user_friendships: { state: 'accepted' } }
   # has_many :pending_user_friendships, class_name: 'UserFriendship',
@@ -34,5 +38,9 @@ class User < ApplicationRecord
     downcased_email = stripped_email.downcase
     hash = Digest::MD5.hexdigest(downcased_email)    
     "https://secure.gravatar.com/avatar/#{hash}"    
+  end
+
+  def has_blocked?(other_user)
+    blocked_friends.include?(other_user)
   end
 end
